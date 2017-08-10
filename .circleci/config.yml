@@ -31,7 +31,7 @@ jobs:
     steps:
       - run:
           name: Install dependencies
-          command: apt-get update && apt-get install git
+          command: apt-get update -q && apt-get install -y -q git
       - checkout
       - run:
           name: Build the code on Ubuntu
@@ -43,7 +43,7 @@ jobs:
     steps:
       - run:
           name: Install dependencies
-          command: apt-get update && apt-get install git
+          command: apt-get update -q && apt-get install -y -q git
       - checkout
       - run:
           name: Test the code on Ubuntu
