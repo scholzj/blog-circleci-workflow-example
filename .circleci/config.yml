@@ -1,0 +1,53 @@
+version: 2
+jobs:
+  centos_build:
+    working_directory: ~/build
+    docker:
+      - image: centos:7
+    steps:
+      - run:
+          name: Install dependencies
+          command: yum install -y git
+      - checkout
+      - run:
+          name: Build the code on CentOS
+          command: cat build.txt
+  centos_test:
+    working_directory: ~/test
+    docker:
+      - image: centos:7
+    steps:
+      - run:
+          name: Install dependencies
+          command: yum install -y git
+      - checkout
+      - run:
+          name: Test the code on CentOS
+          command: cat test.txt
+  deployment:
+    working_directory: ~/deploy
+    docker:
+      - image: centos:7
+    steps:
+      - run:
+          name: Install dependencies
+          command: yum install -y git
+      - checkout
+      - run:
+          name: Deploy the code from CentOS
+          command: cat test.txt
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - centos_build
+      - centos_test:
+          requires:
+            - centos_build
+      - hold:
+         type: approval
+         requires:
+           - centos_test
+      - deployment:
+          requires:
+            - hold
